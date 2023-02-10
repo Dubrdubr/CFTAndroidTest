@@ -7,17 +7,17 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class BinInfoDto(
     @Json(name = "bank")
-    val bank: Bank,
+    val bankDto: BankDto?,
     @Json(name = "brand")
-    val brand: String,
+    val brand: String?,
     @Json(name = "country")
-    val country: Country,
+    val countryDto: CountryDto?,
     @Json(name = "number")
-    val number: Number,
+    val numberDto: NumberDto?,
     @Json(name = "prepaid")
-    val prepaid: Boolean,
+    val prepaid: Boolean?,
     @Json(name = "scheme")
-    val scheme: String,
+    val scheme: String?,
     @Json(name = "type")
-    val type: String
+    val type: String?
 )
