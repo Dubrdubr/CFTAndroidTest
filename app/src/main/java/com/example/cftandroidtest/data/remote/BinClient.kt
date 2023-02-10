@@ -10,7 +10,7 @@ class BinClient @Inject constructor(
 
     suspend fun getBinInfo(
         query: String
-    ): Resource<BinInfoDto> =
+    ): BinInfoDto =
         binService.getBinInfo(
             query = query
         )

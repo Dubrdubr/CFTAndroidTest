@@ -10,5 +10,5 @@ interface BinService {
     @GET("/{query}")
     suspend fun getBinInfo(
         @Path("query") query: String
-    ): Resource<BinInfoDto>
+    ): BinInfoDto
 }
