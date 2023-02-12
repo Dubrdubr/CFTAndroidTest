@@ -21,11 +21,16 @@ class BinViewModel @Inject constructor(
     private var searchJob: Job? = null
 
     fun onQueryChanged(query: String) {
+        val queryLength = query.trim().length
         state = state.copy(searchQuery = query)
+//        if (queryLength < 4) return
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             delay(500)
             getBinInfo()
+        }
+        if (queryLength >= 8) {
+
         }
     }
 
