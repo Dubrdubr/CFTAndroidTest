@@ -1,6 +1,8 @@
 package com.example.cftandroidtest.di
 
+import com.example.cftandroidtest.data.local.repository.BinDbRepositoryImpl
 import com.example.cftandroidtest.data.repository.BinRepositoryImpl
+import com.example.cftandroidtest.domain.repository.BinDbRepository
 import com.example.cftandroidtest.domain.repository.BinRepository
 import dagger.Binds
 import dagger.Module
@@ -17,4 +19,10 @@ interface RepositoryModule {
     fun bindBinRepository(
         binRepositoryImpl: BinRepositoryImpl
     ): BinRepository
+
+    @Binds
+    @Singleton
+    fun bindBinDbRepository(
+        binDbRepositoryImpl: BinDbRepositoryImpl
+    ): BinDbRepository
 }

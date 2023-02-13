@@ -5,10 +5,12 @@ import kotlinx.coroutines.flow.Flow
 
 interface BinRepository {
 
-    fun getBinInfo(
+    suspend fun getBinInfo(
         query: String,
         onStart: () -> Unit,
         onComplete: () -> Unit,
         onError: (String) -> Unit,
     ): Flow<BinInfo?>
+
+
 }

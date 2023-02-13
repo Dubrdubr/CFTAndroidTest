@@ -1,8 +1,11 @@
 package com.example.cftandroidtest.presentation
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.cftandroidtest.domain.repository.BinDbRepository
 import com.example.cftandroidtest.domain.repository.BinRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -13,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BinViewModel @Inject constructor(
-    private val repository: BinRepository
+    private val repository: BinRepository,
+    private val dbRepository: BinDbRepository
 ) : ViewModel() {
 
     var state by mutableStateOf(BinInfoState())
@@ -23,14 +27,15 @@ class BinViewModel @Inject constructor(
     fun onQueryChanged(query: String) {
         val queryLength = query.trim().length
         state = state.copy(searchQuery = query)
-//        if (queryLength < 4) return
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             delay(500)
             getBinInfo()
         }
-        if (queryLength >= 8) {
-
+        viewModelScope.launch {
+            if (queryLength >= 8 && state.binInfo != null) {
+                dbRepository.insertBinInfo(state.binInfo!!)
+            }
         }
     }
 
