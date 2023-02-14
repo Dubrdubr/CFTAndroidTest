@@ -14,32 +14,32 @@ class Converters @Inject constructor(
 ) {
 
     @TypeConverter
-    fun fromBank(bank: Bank): String? {
+    fun fromBank(bank: Bank?): String? {
         return moshi.adapter(Bank::class.java).toJson(bank)
     }
 
     @TypeConverter
-    fun toBank(bankString: String): Bank? {
-        return moshi.adapter(Bank::class.java).fromJson(bankString)
+    fun toBank(bankString: String?): Bank? {
+        return bankString?.let { moshi.adapter(Bank::class.java).fromJson(it) }
     }
 
     @TypeConverter
-    fun fromCountry(country: Country): String? {
+    fun fromCountry(country: Country?): String? {
         return moshi.adapter(Country::class.java).toJson(country)
     }
 
     @TypeConverter
-    fun toCountry(countryString: String): Country? {
-        return moshi.adapter(Country::class.java).fromJson(countryString)
+    fun toCountry(countryString: String?): Country? {
+        return countryString?.let { moshi.adapter(Country::class.java).fromJson(it) }
     }
 
     @TypeConverter
-    fun fromNumber(number: Number): String? {
+    fun fromNumber(number: Number?): String? {
         return moshi.adapter(Number::class.java).toJson(number)
     }
 
     @TypeConverter
-    fun toNumber(numberString: String): Number? {
-        return moshi.adapter(Number::class.java).fromJson(numberString)
+    fun toNumber(numberString: String?): Number? {
+        return numberString?.let { moshi.adapter(Number::class.java).fromJson(it) }
     }
 }

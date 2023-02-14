@@ -29,7 +29,7 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideAppDatabase(
-        @ApplicationContext application: Application,
+        application: Application,
         typeConverter: Converters
     ): BinDatabase {
         return Room.databaseBuilder(

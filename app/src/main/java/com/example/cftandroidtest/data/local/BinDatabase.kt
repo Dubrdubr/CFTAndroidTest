@@ -6,7 +6,7 @@ import androidx.room.TypeConverters
 
 @Database(
     entities = [BinInfoEntity::class],
-    version = 1
+    version = 3
 )
 @TypeConverters(value = [Converters::class])
 abstract class BinDatabase : RoomDatabase() {

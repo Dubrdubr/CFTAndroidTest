@@ -5,9 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface BinDbRepository {
 
-    suspend fun insertBinInfo(
-        entity: BinInfo
-    )
+    suspend fun insertBinInfo(binInfo: BinInfo)
 
     suspend fun getCardNumbersList(
         onStart: () -> Unit,
@@ -19,4 +17,6 @@ interface BinDbRepository {
         onStart: () -> Unit,
         onComplete: () -> Unit
     ): Flow<BinInfo>
+
+    suspend fun deleteBinInfo(cardNumber: String)
 }

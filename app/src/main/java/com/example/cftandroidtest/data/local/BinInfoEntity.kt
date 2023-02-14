@@ -9,7 +9,8 @@ import com.example.cftandroidtest.domain.model.Number
 
 @Entity(tableName = "bin_info")
 data class BinInfoEntity(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    val id: Int? = null,
     @ColumnInfo(name = "card_number")
     val cardNumber: String,
     val bank: Bank?,

@@ -14,8 +14,8 @@ class BinDbRepositoryImpl @Inject constructor(
     private val dao: BinInfoDao
 ) : BinDbRepository {
 
-    override suspend fun insertBinInfo(entity: BinInfo) {
-        dao.insertBinInfo(entity.asEntity())
+    override suspend fun insertBinInfo(binInfo: BinInfo) {
+        dao.insertBinInfo(binInfo.asEntity())
     }
 
     override suspend fun getCardNumbersList(
@@ -34,4 +34,8 @@ class BinDbRepositoryImpl @Inject constructor(
         val binInfo = dao.getBinInfo(cardNumber)
         emit(binInfo.asDomain(cardNumber))
     }.onStart { onStart() }.onCompletion { onComplete() }
+
+    override suspend fun deleteBinInfo(cardNumber: String) {
+        dao.delete(cardNumber)
+    }
 }
