@@ -5,13 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.cftandroidtest.domain.model.BinInfo
 import com.example.cftandroidtest.domain.repository.BinDbRepository
 import com.example.cftandroidtest.domain.repository.BinRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,27 +23,64 @@ class BinViewModel @Inject constructor(
 
     private var searchJob: Job? = null
 
+    init {
+        getCardNumbersList()
+    }
+
     fun onQueryChanged(query: String) {
-        val queryLength = query.trim().length
         state = state.copy(searchQuery = query)
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             delay(500)
-            getBinInfo()
-        }
-        viewModelScope.launch {
-            if (queryLength >= 8 && state.binInfo != null) {
+            getBinInfo().join()
+            val cardNumber = state.binInfo?.cardNumber
+            if (cardNumber?.length != 8) return@launch
+            if (state.cardNumbersList.contains(cardNumber)) {
+                insertExistedBinInfo(state.binInfo!!).join()
+            } else {
                 dbRepository.insertBinInfo(state.binInfo!!)
+            }
+            getCardNumbersList()
+        }
+
+    }
+
+    fun getBinInfoFromDb(cardNumber: String) {
+        viewModelScope.launch {
+            dbRepository.getBinInfo(
+                cardNumber = cardNumber,
+                onStart = { state = state.copy(infoIsLoading = true) },
+                onComplete = { state = state.copy(infoIsLoading = false) }
+            ).collectLatest {
+                state = state.copy(binInfo = it, searchQuery = cardNumber)
             }
         }
     }
 
-    private fun getBinInfo(query: String = state.searchQuery) {
+    private fun insertExistedBinInfo(binInfo: BinInfo): Job {
+        return viewModelScope.launch {
+            dbRepository.deleteBinInfo(binInfo.cardNumber)
+            dbRepository.insertBinInfo(binInfo)
+        }
+    }
+
+    private fun getCardNumbersList() {
         viewModelScope.launch {
+            dbRepository.getCardNumbersList(
+                onStart = { state = state.copy(listIsLoading = true) },
+                onComplete = { state = state.copy(listIsLoading = false) }
+            ).collectLatest {
+                state = state.copy(cardNumbersList = it)
+            }
+        }
+    }
+
+    private fun getBinInfo(query: String = state.searchQuery): Job {
+        return viewModelScope.launch {
             repository.getBinInfo(
                 query,
-                onStart = { state = state.copy(isLoading = true) },
-                onComplete = { state = state.copy(isLoading = false) },
+                onStart = { state = state.copy(infoIsLoading = true) },
+                onComplete = { state = state.copy(infoIsLoading = false) },
                 onError = { state = state.copy(message = it) },
             ).collectLatest {
                 state = state.copy(binInfo = it)

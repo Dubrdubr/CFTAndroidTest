@@ -14,9 +14,9 @@ data class CountryDto(
     @Json(name = "emoji")
     val emoji: String?,
     @Json(name = "latitude")
-    val latitude: Int?,
+    val latitude: Float?,
     @Json(name = "longitude")
-    val longitude: Int?,
+    val longitude: Float?,
     @Json(name = "name")
     val name: String?,
     @Json(name = "numeric")
