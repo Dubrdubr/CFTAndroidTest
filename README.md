@@ -1,5 +1,5 @@
 # Описание задачи
-[Ссылка на оригинальный текст заадния](https://drive.google.com/file/d/122MrDCIUBKL6DkZHnSjbYOYP_6_Oy84K/view)
+[Ссылка на оригинальный текст задания](https://drive.google.com/file/d/122MrDCIUBKL6DkZHnSjbYOYP_6_Oy84K/view)
 
 Реализовать Android-приложение со следующими функциями:
 1. Пользователь вводит BIN банковской карты и видит всю доступную информацию о нём,
